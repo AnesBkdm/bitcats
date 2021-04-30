@@ -1,8 +1,8 @@
-#body {
+#head {
     background-color: royalblue;
-    width: 200px;
+    width: 300px;
     height: 200px;
-    border-radius: 50%;
+    border-radius: 60% 60% 50% 50%;
 }
 
 .eyes {
@@ -12,22 +12,23 @@
 }
 
 .eye {
-    background-color: white;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    margin: 25px;
-    position: relative;
-}
-
-.pupils {
     background-color: black;
     border-radius: 50%;
     width: 30px;
-    height: 30px;
+    height: 60px;
+    margin: 40px;
+    position: relative;
+    left: 42px;
+}
+
+.pupils {
+    background-color: white;
+    border-radius: 50%;
+    width: 15px;
+    height: 20px;
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 5px;
+    left: 8px;
 }
 
 .ears {
@@ -42,11 +43,70 @@
     position: absolute;
 }
 
-.left_ear {
+.left-ear {
     transform: scale(1,-1);
     left: 0px;
 }
 
-.right_ear {
-    left: 100px;
+.right-ear {
+    left: 200px;
+}
+
+.inner-ear {
+    border-radius: 90% 0% 90% 0%;
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    position: relative;
+}
+
+.right-inner-ear {
+    position: relative;
+    top: 10px;
+    left: 40px;
+    clip: rect(0px,60px,200px,0px);
+}
+
+.left-inner-ear {
+    position: relative;
+    top: 40px;
+    left: 10px;
+}
+
+.nose {
+    width: 0;
+    height: 0;
+    position: relative;
+    left: calc(50%);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid rgb(0, 0, 0);
+    border-radius: 50% 50% 50% 50%;
+    /* background-color: black; */
+}
+
+#body {
+    background-color: royalblue;
+    width: 200px;
+    height: 200px;
+    margin-top: -40px;
+    margin-left: 50px;
+    border-radius: 60% 60% 50% 50%;
+}
+
+.paws {
+    background-color: black;
+    border-radius: 50%;
+    width: 30px;
+    height: 60px;
+    margin: 40px;
+    position: absolute;
+}
+
+.right-paw {
+
+}
+
+.left-paw {
+    
 }

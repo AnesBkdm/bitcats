@@ -38,6 +38,19 @@ function earsColor(color,code) {
     $('#dnaears').html(code) 
 }
 
+function sideColor(color,code) {
+    $('.cat__head-dots_first').css('background', '#' + color)
+    $('.cat__head-dots_second').css('background', '#' + color)
+    $('#sidecode').html('code: '+code)
+    $('#dnadecorationSides').html(code)
+}
+
+function midColor(color,code) {
+    $('.cat__head-dots').css('background', '#' + color)
+    $('#midcode').html('code: '+code)
+    $('#dnadecorationMid').html(code)
+}
+
 
 function eyeVariation(num) {
 
@@ -86,24 +99,27 @@ function decorationVariation(num) {
 
     switch (num) {
         case 1:
-            $('#decorationName').html('Basic')
+            $('#decorationName').html('Default')
             normaldecoration()
             break
         
         case 2:
-            $('#decorationName').html('Chill')
-            normaldecoration()
+            $('#decorationName').html('Out')
+            outdecoration()
             break
 
         case 3:
-            $('#decorationName').html('Chill')
-            normaldecoration()
+            $('#decorationName').html('In')
+            indecoration()
             break
     }
 }
 
-var lastEyeColor = $('.cat__eye span').css('background-color');
+// var lastEyeColor = $('.cat__eye span').css('background-color');
 
+/**
+ * Eyes variation
+ */
 async function normalEyes() {
     // await $('.cat__eye span').css('background', '##ffffff');
     await $('.cat__eye').find('span').css('border', 'none');
@@ -129,10 +145,24 @@ async function zombieEyes() {
     await $('.cat__eye').find('span').css('border-top', '40px solid')
 }
 
+
+/**
+ * Decoration patterns
+ */
 async function normaldecoration() {
-    //Remove all style from other decorations
-    //In this way we can also use normalDecoration() to reset the decoration style
     $('.cat__head-dots').css({ "transform": "rotate(0deg)", "height": "48px", "width": "14px", "top": "1px", "border-radius": "0 0 50% 50%" })
     $('.cat__head-dots_first').css({ "transform": "rotate(0deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "50% 0 50% 50%" })
     $('.cat__head-dots_second').css({ "transform": "rotate(0deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "0 50% 50% 50%" })
+}
+
+async function outdecoration() {
+    $('.cat__head-dots').css({ "transform": "rotate(0deg)", "height": "48px", "width": "14px", "top": "1px", "border-radius": "0 0 50% 50%" })
+    $('.cat__head-dots_first').css({ "transform": "rotate(-45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "50% 0 50% 50%" })
+    $('.cat__head-dots_second').css({ "transform": "rotate(45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "0 50% 50% 50%" })
+}
+
+async function indecoration() {
+    $('.cat__head-dots').css({ "transform": "rotate(0deg)", "height": "48px", "width": "14px", "top": "1px", "border-radius": "0 0 50% 50%" })
+    $('.cat__head-dots_first').css({ "transform": "rotate(45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "50% 0 50% 50%" })
+    $('.cat__head-dots_second').css({ "transform": "rotate(-45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "0 50% 50% 50%" })
 }

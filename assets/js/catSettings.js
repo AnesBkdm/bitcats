@@ -55,6 +55,9 @@ function renderCat(dna){
     eyesColor(colors[dna.eyesColor],dna.eyesColor)
     earsColor(colors[dna.earsColor],dna.earsColor)
     eyeVariation(dna.eyesShape)
+    decorationVariation(dna.decorationPattern)
+    midColor(colors[dna.decorationMidcolor],dna.decorationMidcolor)
+    sideColor(colors[dna.decorationSidescolor],dna.decorationSidescolor)
 
     $('#bodycolor').val(dna.headcolor)
     $('#mouthcolor').val(dna.mouthColor)
@@ -62,6 +65,9 @@ function renderCat(dna){
     $('#earscolor').val(dna.earsColor)
 
     $('#eyeshape').val(dna.eyesShape)
+    $('#patternshape').val(dna.decorationPattern)
+    $('#midcolor').val(dna.decorationMidcolor)
+    $('#sidecolor').val(dna.decorationSidescolor)
 }
 
 // Changing cat colors
@@ -85,8 +91,28 @@ $('#earscolor').change(()=>{
   earsColor(colors[colorVal],colorVal)
 })
 
-// Listener for the eyeshape
+/**
+ * Pattern colors
+ */
+$('#sidecolor').change(()=>{
+  var colorVal = $('#sidecolor').val()
+  sideColor(colors[colorVal],colorVal)
+})
+
+$('#midcolor').change(()=>{
+  var colorVal = $('#midcolor').val()
+  midColor(colors[colorVal],colorVal)
+})
+
+// Listener for the eyeshape etc.
 $('#eyeshape').change(() => {
   var shape = parseInt($('#eyeshape').val())
   eyeVariation(shape)
 })
+
+$('#patternshape').change(() => {
+  var shape = parseInt($('#patternshape').val())
+  decorationVariation(shape)
+})
+
+

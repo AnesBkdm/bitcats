@@ -32,7 +32,7 @@
     animation: earLeft 3s infinite;
 }
 
-.moveSingleEar {
+.moveSingleEarRight {
     animation: earRight 3s infinite;
 }
 
@@ -41,6 +41,17 @@
 */
 .movingTail {
     animation: moveTail 2.5s infinite;
+}
+
+/**
+ * Attention animation
+*/
+.attentionLeft {
+    animation: earUpLeft 6s infinite;
+}
+
+.attentionRight {
+    animation: earUpRight 6s infinite;
 }
 
 /**
@@ -128,6 +139,4 @@
     0%, 50% {
         transform: rotate(170deg);
     }
-
-    100% 
 }

@@ -123,4 +123,16 @@ $('#animations').change(() => {
   animationVariation(animationVal)
 })
 
+/**
+ * Buttons
+ */
+$("#cattributesBtn").change(() => {
+  $('#cattributes').addClass('hideDiv');
+})
+
+$("#colorsBtn").change(() => {
+  $('#head').addClass('catcolors');
+})
+
+
 

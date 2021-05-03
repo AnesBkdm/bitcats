@@ -27,7 +27,7 @@ $( document ).ready(function() {
   $('#dnadecoration').html(defaultDNA.decorationPattern);
   $('#dnadecorationMid').html(defaultDNA.decorationMidcolor);
   $('#dnadecorationSides').html(defaultDNA.decorationSidescolor);
-  $('#dnaanimation').html(defaultDNA.animation);
+  $('#dnadanimation').html(defaultDNA.animation);
   $('#dnaspecial').html(defaultDNA.lastNum);
 
   renderCat(defaultDNA);
@@ -43,7 +43,7 @@ function getDna(){
     dna += $('#dnadecoration').html()
     dna += $('#dnadecorationMid').html()
     dna += $('#dnadecorationSides').html()
-    dna += $('#dnaanimation').html()
+    dna += $('#dnadanimation').html()
     dna += $('#dnaspecial').html()
 
     return parseInt(dna)
@@ -58,6 +58,7 @@ function renderCat(dna){
     decorationVariation(dna.decorationPattern)
     midColor(colors[dna.decorationMidcolor],dna.decorationMidcolor)
     sideColor(colors[dna.decorationSidescolor],dna.decorationSidescolor)
+    animationVariation(dna.animation)
 
     $('#bodycolor').val(dna.headcolor)
     $('#mouthcolor').val(dna.mouthColor)
@@ -68,6 +69,8 @@ function renderCat(dna){
     $('#patternshape').val(dna.decorationPattern)
     $('#midcolor').val(dna.decorationMidcolor)
     $('#sidecolor').val(dna.decorationSidescolor)
+
+    $('#animations').val(dna.animation)
 }
 
 // Changing cat colors
@@ -113,6 +116,11 @@ $('#eyeshape').change(() => {
 $('#patternshape').change(() => {
   var shape = parseInt($('#patternshape').val())
   decorationVariation(shape)
+})
+
+$('#animations').change(() => {
+  var animationVal = parseInt($('#animations').val())
+  animationVariation(animationVal)
 })
 
 

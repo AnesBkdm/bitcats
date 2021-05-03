@@ -1,0 +1,133 @@
+/**
+ * Moving head
+*/
+.rotateHead {
+    animation: rotateHead 4s infinite ; 
+}
+
+.yesHead {
+    animation: yesHead 4s infinite ; 
+}
+
+.noHead {
+    animation: noHead 4s infinite ; 
+}
+
+.nothingHead {
+    animation: nothingHead 4s infinite ;
+}
+
+/**
+ * Moving ears
+*/
+.moveEarsLeft {
+    animation: moveEarsLeft 4s infinite;
+}
+
+.moveEarsRight {
+    animation: moveEarsRight 4s infinite;
+}
+
+.moveSingleEarLeft {
+    animation: earLeft 3s infinite;
+}
+
+.moveSingleEar {
+    animation: earRight 3s infinite;
+}
+
+/**
+ * Moving tail
+*/
+.movingTail {
+    animation: moveTail 2.5s infinite;
+}
+
+/**
+* Keyframes
+*/
+@keyframes moveTail {
+    0% {
+        transform: rotate(-45deg);
+    }
+
+    50% {
+        transform: rotate(-30deg);
+    }
+
+    100% {
+        transform: rotate(-45deg);
+    }
+}
+
+@keyframes rotateHead {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    30% {
+        transform: rotate(8deg);
+    }
+
+    60% {
+        transform: rotate(-8deg); 
+    }
+
+    90% {
+        transform: rotate(0deg);  
+    }
+}
+
+@keyframes noHead {
+    0% {
+        transform:translate(0,0);
+    }
+
+    30% {
+        transform:translate(-15px,0);
+    }
+
+    60% {
+        transform:translate(15px,0);
+    }
+
+    90% {
+        transform:translate(0,0); 
+    }
+}
+
+@keyframes yesHead {
+    0% {
+        transform:translate(0,0);
+    }
+
+    30% {
+        transform:translate(0,-8px);
+    }
+
+    60% {
+        transform:translate(0,15px);
+    }
+
+    90% {
+        transform:translate(0,0); 
+    }
+}
+
+@keyframes nothingHead {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes moveEarsRight {
+    0%, 50% {
+        transform: rotate(170deg);
+    }
+
+    100% 
+}

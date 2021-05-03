@@ -115,6 +115,33 @@ function decorationVariation(num) {
     }
 }
 
+function animationVariation(num) {
+
+    $('#dnadanimation').html(num)
+
+    switch (num) {
+        case 1:
+            $('#animationName').html('No animation')
+            nothingAnimation()
+            break
+        
+        case 2:
+            $('#animationName').html('Rotation')
+            rotationAnimation()
+            break
+
+        case 3:
+            $('#animationName').html('Yes')
+            yesAnimation()
+            break
+        
+        case 4:
+            $('#animationName').html('No')
+            noAnimation()
+            break
+    }
+}
+
 // var lastEyeColor = $('.cat__eye span').css('background-color');
 
 /**
@@ -165,4 +192,43 @@ async function indecoration() {
     $('.cat__head-dots').css({ "transform": "rotate(0deg)", "height": "48px", "width": "14px", "top": "1px", "border-radius": "0 0 50% 50%" })
     $('.cat__head-dots_first').css({ "transform": "rotate(45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "50% 0 50% 50%" })
     $('.cat__head-dots_second').css({ "transform": "rotate(-45deg)", "height": "35px", "width": "14px", "top": "1px", "border-radius": "0 50% 50% 50%" })
+}
+
+/**
+ * Animations patterns
+ */
+async function resetAnimation() {
+    $("#head").removeClass('nothingHead');
+    $("#head").removeClass('rotationHead');
+    $("#head").removeClass('yesHead');
+    $("#head").removeClass('noHead');
+
+    $("#cat__ear").removeClass('nothingHead');
+    $("#cat__ear").removeClass('rotationHead');
+    $("#cat__ear").removeClass('yesHead');
+    $("#cat__ear").removeClass('noHead');
+}
+
+async function nothingAnimation() {
+    resetAnimation();
+    $('#head').addClass('nothingHead');
+    $('#cat__ear').addClass('nothingHead');
+}
+
+async function rotationAnimation() {
+    resetAnimation();
+    $('#head').addClass('rotateHead');
+    $('#cat__ear').addClass('rotationHead');
+}
+
+async function yesAnimation() {
+    resetAnimation();
+    $('#head').addClass('yesHead');
+    // $('#cat__ear').addClass('yesHead');
+}
+
+async function noAnimation() {
+    resetAnimation();
+    $('#head').addClass('noHead');
+    // $('#cat__ear').addClass('noHead');
 }

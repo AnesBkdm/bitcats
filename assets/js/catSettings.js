@@ -126,13 +126,55 @@ $('#animations').change(() => {
 /**
  * Buttons
  */
-$("#cattributesBtn").change(() => {
-  $('#cattributes').addClass('hideDiv');
+
+var sw = false;
+
+$("#cattributesBtn").click(() => {
+  if(sw){
+    $('#catColors').addClass('hideDiv');
+    $('#cattributes').removeClass('hideDiv');
+    sw = false;
+  }
 })
 
-$("#colorsBtn").change(() => {
-  $('#head').addClass('catcolors');
+$("#colorsBtn").click(() => {
+  if(!sw){
+    $('#catColors').removeClass('hideDiv');
+    $('#cattributes').addClass('hideDiv');
+    sw = true;
+  }
 })
+
+$("#randomizeBtn").click(() => {
+  var randomDNA = {
+    //Colors
+    "headcolor" : Math.floor(Math.random() * 89) + 10,
+    "mouthColor" : Math.floor(Math.random() * 89) + 10,
+    "eyesColor" : Math.floor(Math.random() * 89) + 10,
+    "earsColor" : Math.floor(Math.random() * 89) + 10,
+
+    //Cattributes
+    "eyesShape" : Math.floor(Math.random() * 6) + 1,
+    "decorationPattern" : Math.floor(Math.random() * 3) + 1,
+    "decorationMidcolor" : Math.floor(Math.random() * 89) + 10,
+    "decorationSidescolor" : Math.floor(Math.random() * 89) + 10,
+    "animation" :  Math.floor(Math.random() * 4) + 1,
+    "lastNum" :  1
+    }
+
+  renderCat(randomDNA);
+
+})
+
+$("#defaultBtn").click(() => {
+  renderCat(defaultDNA);
+})
+
+$("#createBtn").click(() => {
+  
+})
+
+
 
 
 

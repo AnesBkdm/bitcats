@@ -2,18 +2,19 @@
 
 /**
  * @author Nes B.
- * @dev Bitcats ERC721 main contract
+ * @dev Bitcats ERC721 main contract & functions
  * @notice Developed using Truffle 5.3.2
  */
- 
 pragma solidity ^0.8.0;
 
 import "./IERC721.sol";
+import "./Ownable.sol";
 
-contract Bitcats is IERC721 {
+contract Bitcats is IERC721, Ownable {
 
-    string public contractName = "Bitcats";
-    string public ticker = "BITC";
+    uint256 public constant CREATION_LIMIT_GEN0 = 5;
+    string public constant contractName = "Bitcats";
+    string public constant ticker = "BITC";
 
     struct Cat {
         uint256 genes;
@@ -29,6 +30,7 @@ contract Bitcats is IERC721 {
     mapping (uint256 => address) public catOwnership;
     mapping (uint256 => bool) catExists;
     
+    uint256 public gen0counter;
     /**
      * MODIFIERS
      */
@@ -42,14 +44,76 @@ contract Bitcats is IERC721 {
         _;
     }
 
-    modifier isOwner(uint256 tokenId) {
-        require(catOwnership[tokenId] ==  msg.sender);
-        _;
-    }
-
     modifier catMustExist(uint256 tokenId) {
         require(catExists[tokenId], "This cat doesn't exist, sorry.");
         _;
+    }
+
+    modifier onlyCatOwner(uint tokenId) {
+        require(catOwnership[tokenId] == address(msg.sender), "You do not own this cat");
+        _;
+    }
+
+    /**
+     * Creating cats
+     */
+    event Birth(address _owner, uint256 _catId, uint256 _momId, uint256 _dadId, uint256 _genes);
+
+    function _createCat(
+        uint256 _momId,
+        uint256 _dadId,
+        uint256 _generation,
+        uint256 _genes,
+        address _owner
+    ) private returns (uint256) {
+        
+        Cat memory _cat = Cat({
+            genes: _genes,
+            birthTime: uint64(block.timestamp),
+            momId: uint32(_momId),
+            dadId: uint32(_dadId),
+            generation: uint16(_generation)
+        });
+
+        cats.push(_cat);
+
+        uint256 newCatId = cats.length - 1;
+
+        catExists[newCatId] =  true;         // Updating mappings
+        catOwnership[newCatId] = _owner;     // Updating mappings
+
+        ownedTokenCount[address(0)] = 1;
+
+        _transfer(address(0), _owner, newCatId);
+
+        emit Birth(_owner, newCatId, _momId, _dadId, _genes);
+
+        return newCatId;
+    }
+
+    function createCatGen0(uint256 _genes) public onlyOwner {
+        require(gen0counter < CREATION_LIMIT_GEN0, "Creation limit reached");
+        gen0counter++;
+        _createCat(0, 0, 0, _genes, msg.sender);
+    }
+
+    function getCat(uint256 _tokenId) public view returns (
+        uint256 momId_, 
+        uint256 dadId_,
+        uint256 birthtime_,
+        uint256 generation_, 
+        uint256 genes_, 
+        address owner_
+    ) 
+    {
+        Cat storage cat = cats[_tokenId];
+
+        momId_ = cat.momId;
+        dadId_ = cat.dadId;
+        generation_ = cat.generation;
+        birthtime_ = cat.birthTime;
+        genes_ = cat.genes;
+        owner_ = catOwnership[_tokenId];
     }
 
     /**
@@ -73,14 +137,14 @@ contract Bitcats is IERC721 {
     /**
      * @dev Returns the name of the token.
      */
-    function name() external view override returns (string memory tokenName) {
+    function name() external pure override returns (string memory tokenName) {
         return contractName;
     }
 
     /**
      * @dev Returns the symbol of the token.
      */
-    function symbol() external view override returns (string memory tokenSymbol) {
+    function symbol() external pure override returns (string memory tokenSymbol) {
         return ticker;
     }
 
@@ -108,11 +172,11 @@ contract Bitcats is IERC721 {
      *
      * Emits a {Transfer} event.
      */
-    function transfer(address to, uint256 tokenId) external override noZero(to) notThisContract(to) isOwner(tokenId) {
+    function transfer(address to, uint256 tokenId) external override noZero(to) notThisContract(to) onlyCatOwner(tokenId) {
         _transfer(msg.sender, to, tokenId);
     }
 
-    function _transfer(address _from, address _to, uint256 _tokenId) internal noZero(_from) noZero(_to) {
+    function _transfer(address _from, address _to, uint256 _tokenId) internal {
         ownedTokenCount[_from]--;
         ownedTokenCount[_to]++;
         catOwnership[_tokenId] = _to;

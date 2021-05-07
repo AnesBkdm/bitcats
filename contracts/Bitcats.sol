@@ -12,7 +12,7 @@ import "./Ownable.sol";
 
 contract Bitcats is IERC721, Ownable {
 
-    uint256 public constant CREATION_LIMIT_GEN0 = 5;
+    uint256 public constant CREATION_LIMIT_GEN0 = 25;
     string public constant contractName = "Bitcats";
     string public constant ticker = "BITC";
 
@@ -98,22 +98,22 @@ contract Bitcats is IERC721, Ownable {
     }
 
     function getCat(uint256 _tokenId) public view returns (
-        uint256 momId_, 
-        uint256 dadId_,
-        uint256 birthtime_,
-        uint256 generation_, 
-        uint256 genes_, 
-        address owner_
+        uint256 momId, 
+        uint256 dadId,
+        uint256 birthtime,
+        uint256 generation, 
+        uint256 genes, 
+        address owner
     ) 
     {
         Cat storage cat = cats[_tokenId];
 
-        momId_ = cat.momId;
-        dadId_ = cat.dadId;
-        generation_ = cat.generation;
-        birthtime_ = cat.birthTime;
-        genes_ = cat.genes;
-        owner_ = catOwnership[_tokenId];
+        momId = cat.momId;
+        dadId = cat.dadId;
+        generation = cat.generation;
+        birthtime = cat.birthTime;
+        genes = cat.genes;
+        owner = catOwnership[_tokenId];
     }
 
     /**

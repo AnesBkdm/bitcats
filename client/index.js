@@ -29,9 +29,29 @@ function createCat() {
         else {
             console.log(txHash);
             alert("Cat with DNA " + getDna() + " created");
-            getCatEventDna();
+
+            instance.events.Birth().on("data", function(event) {
+                console.log(event);
+                
+                
+                let owner = event.returnValues._owner;
+                let catId = event.returnValues._catId;
+                let momId = event.returnValues._momId;
+                let dadId = event.returnValues._dadId;
+                let genes = event.returnValues._genes;
+
+                $("#catCreation").text("owner: " + owner
+                                    + " catId: " + catId
+                                    + " momId: " + momId
+                                    + " dadId: " + dadId
+                                    + " genes: " + genes);
+
+            }).on("error", console.error);
+            
+            var txt = getCatEventDna();
+            console.log(txt);
             getCatBirthEvent();
-            $("#catCreation").text('txt');
+            $("#catCreation").text(txt);
         }
     });
 }
@@ -39,6 +59,7 @@ function createCat() {
 function getCatEventDna() {
     instance.events.Birth().on("data", function(event) {
         console.log(event.returnValues._genes);
+        return event.returnValues._genes;
     }).on("error", console.error);
 }
 

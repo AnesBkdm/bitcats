@@ -36,6 +36,7 @@ contract Bitcats is IERC721, Ownable {
     mapping (uint256 => address) public catIndexApproved;
     mapping (address => mapping (address => bool)) private _operatorApprovals;
     
+
     uint256 public gen0counter;
     /**
      * MODIFIERS
@@ -57,6 +58,16 @@ contract Bitcats is IERC721, Ownable {
 
     modifier onlyCatOwner(uint tokenId) {
         require(catOwnership[tokenId] == address(msg.sender), "You do not own this cat");
+        _;
+    }
+
+    modifier onlyCatApproved(uint tokenId) {
+        require(catIndexApproved[tokenId] == msg.sender, "You are not an authorized operator of this cat.");
+        _;
+    }
+
+    modifier isOwner(address owner, uint256 tokenId) {
+        require(catIndexApproved[tokenId] == owner, "The inputted address is not the owner of the cat");
         _;
     }
 
@@ -175,6 +186,24 @@ contract Bitcats is IERC721, Ownable {
         return _operatorApprovals[_owner][_operator];
     }
 
+    function transferFrom(address _from, address _to, uint256 _tokenId) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId){
+        if(catOwnership[_tokenId] == address(msg.sender)                // Cat owner
+        || catIndexApproved[_tokenId] == msg.sender                     // Approved user
+        || _operatorApprovals[catOwnership[_tokenId]][msg.sender]){     // Approved operator
+            _transfer(_from, _to, _tokenId);
+        } else {
+            revert("TRANSFER ERROR: Unauthorized user");
+        }
+    }
+
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) override external{
+
+    }
+
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes calldata data) override external{
+
+    }
+
 
     /**
      * Internal functions
@@ -207,5 +236,4 @@ contract Bitcats is IERC721, Ownable {
     function _setApprovalForAll(address _allower, address _operator, bool _approved) internal {
         _operatorApprovals[_allower][_operator] = _approved;
     }
-
 }

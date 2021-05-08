@@ -34,7 +34,7 @@ contract Bitcats is IERC721, Ownable {
     mapping (uint256 => bool) catExists;
 
     mapping (uint256 => address) public catIndexApproved;
-    mapping (address => mapping (address => bool)) private _operatorApprovals;
+    mapping (address => mapping (address => bool)) private operatorApprovals;
     
 
     uint256 public gen0counter;
@@ -183,13 +183,13 @@ contract Bitcats is IERC721, Ownable {
     }
 
     function isApprovedForAll(address _owner, address _operator) override external view returns (bool){
-        return _operatorApprovals[_owner][_operator];
+        return operatorApprovals[_owner][_operator];
     }
 
     function transferFrom(address _from, address _to, uint256 _tokenId) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId){
-        if(catOwnership[_tokenId] == address(msg.sender)                // Cat owner
-        || catIndexApproved[_tokenId] == msg.sender                     // Approved user
-        || _operatorApprovals[catOwnership[_tokenId]][msg.sender]){     // Approved operator
+        if(catOwnership[_tokenId] == address(msg.sender)    // Cat owner
+        || _isApproved(msg.sender, _tokenId)                // Approved user
+        || _isApprovedForAll(msg.sender, _tokenId)) {       // Approved operator
             _transfer(_from, _to, _tokenId);
         } else {
             revert("TRANSFER ERROR: Unauthorized user");
@@ -234,6 +234,22 @@ contract Bitcats is IERC721, Ownable {
     }
 
     function _setApprovalForAll(address _allower, address _operator, bool _approved) internal {
-        _operatorApprovals[_allower][_operator] = _approved;
+        operatorApprovals[_allower][_operator] = _approved;
+    }
+
+    function _isApproved(address _approved, uint256 _tokenId) private view returns (bool) {
+        if (catIndexApproved[_tokenId] == _approved)
+            return true;
+        else
+            return false;
+             
+    }
+
+    function _isApprovedForAll(address _approved, uint256 _tokenId) private view returns (bool) {
+        if (operatorApprovals[catOwnership[_tokenId]][_approved])
+            return true;
+        else
+            return false;
+             
     }
 }

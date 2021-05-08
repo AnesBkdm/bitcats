@@ -135,7 +135,7 @@ interface IERC721 {
      *  `_tokenId` is not a valid NFT.
      * @param _from The current owner of the NFT
      * @param _to The new owner
-    * @param _tokenId The NFT to transfer
+     * @param _tokenId The NFT to transfer
     */
     function transferFrom(address _from, address _to, uint256 _tokenId) external;
 }

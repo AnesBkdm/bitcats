@@ -25,10 +25,16 @@ contract Bitcats is IERC721, Ownable {
     }
 
     Cat[] cats;
-
+    
+    /**
+     * Mappings
+     */
     mapping (address => uint256) ownedTokenCount;
     mapping (uint256 => address) public catOwnership;
     mapping (uint256 => bool) catExists;
+
+    mapping (uint256 => address) public catIndexApproved;
+    mapping (address => mapping (address => bool)) private _operatorApprovals;
     
     uint256 public gen0counter;
     /**
@@ -116,65 +122,56 @@ contract Bitcats is IERC721, Ownable {
         owner = catOwnership[_tokenId];
     }
 
-    /**
-     * ERC721 implementation
-     */
 
     /**
-     * @dev Returns the number of tokens in ``owner``'s account.
+     * ERC721 implementation
+     * (See IERC721 for notes)
      */
+
     function balanceOf(address owner) external view override returns (uint256 balance) {
         return ownedTokenCount[owner];
     }
 
-    /**
-     * @dev Returns the total number of tokens in circulation.
-     */
     function totalSupply() external view override returns (uint256 total) {
         return cats.length;
     }
 
-    /**
-     * @dev Returns the name of the token.
-     */
     function name() external pure override returns (string memory tokenName) {
         return contractName;
     }
 
-    /**
-     * @dev Returns the symbol of the token.
-     */
     function symbol() external pure override returns (string memory tokenSymbol) {
         return ticker;
     }
 
-    /**
-     * @dev Returns the owner of the `tokenId` token.
-     *
-     * Requirements:
-     *
-     * - `tokenId` must exist.
-     */
     function ownerOf(uint256 tokenId) external view override catMustExist(tokenId) returns (address owner) {
         return catOwnership[tokenId];
     }
 
-
-     /** 
-     @dev Transfers `tokenId` token from `msg.sender` to `to`.
-     *
-     *
-     * Requirements:
-     *
-     * - `to` cannot be the zero address.
-     * - `to` can not be the contract address.
-     * - `tokenId` token must be owned by `msg.sender`.
-     *
-     * Emits a {Transfer} event.
-     */
     function transfer(address to, uint256 tokenId) external override noZero(to) notThisContract(to) onlyCatOwner(tokenId) {
         _transfer(msg.sender, to, tokenId);
     }
+
+    function approve(address _approved, uint256 _tokenId) override external catMustExist(_tokenId) onlyCatOwner(_tokenId) {
+        _approve(_approved, _tokenId);
+    }
+
+    function setApprovalForAll(address _operator, bool _approved) override external{
+        _setApprovalForAll(msg.sender, _operator, _approved);
+    }
+
+    function getApproved(uint256 _tokenId) override external view returns (address){
+        return catIndexApproved[_tokenId];
+    }
+
+    function isApprovedForAll(address _owner, address _operator) override external view returns (bool){
+        return _operatorApprovals[_owner][_operator];
+    }
+
+
+    /**
+     * Internal functions
+     */
 
     function _transfer(address _from, address _to, uint256 _tokenId) internal {
         ownedTokenCount[_from]--;
@@ -189,6 +186,14 @@ contract Bitcats is IERC721, Ownable {
         } else {
             return false;
         }
+    }
+
+    function _approve(address _approved, uint256 _tokenId) internal {
+        catIndexApproved[_tokenId] = _approved;
+    }
+
+    function _setApprovalForAll(address _allower, address _operator, bool _approved) internal {
+        _operatorApprovals[_allower][_operator] = _approved;
     }
 
 }

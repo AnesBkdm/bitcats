@@ -61,9 +61,13 @@ contract Bitcats is IERC721, Ownable {
     }
 
     /**
-     * Creating cats
+     * Additional events
      */
     event Birth(address _owner, uint256 _catId, uint256 _momId, uint256 _dadId, uint256 _genes);
+
+    /**
+     * Creating cats
+     */
 
     function _createCat(
         uint256 _momId,
@@ -154,13 +158,16 @@ contract Bitcats is IERC721, Ownable {
 
     function approve(address _approved, uint256 _tokenId) override external catMustExist(_tokenId) onlyCatOwner(_tokenId) {
         _approve(_approved, _tokenId);
+        emit Approval(msg.sender, _approved, _tokenId);
     }
 
     function setApprovalForAll(address _operator, bool _approved) override external{
+        require (_operator != msg.sender, "You can't set yourself as approved operator.");
         _setApprovalForAll(msg.sender, _operator, _approved);
+        emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
-    function getApproved(uint256 _tokenId) override external view returns (address){
+    function getApproved(uint256 _tokenId) override external view catMustExist(_tokenId) returns (address){
         return catIndexApproved[_tokenId];
     }
 
@@ -174,9 +181,14 @@ contract Bitcats is IERC721, Ownable {
      */
 
     function _transfer(address _from, address _to, uint256 _tokenId) internal {
-        ownedTokenCount[_from]--;
         ownedTokenCount[_to]++;
         catOwnership[_tokenId] = _to;
+
+        if (_from != address(0)){
+            ownedTokenCount[_from]--;
+            delete catIndexApproved[_tokenId];
+        }
+
         emit Transfer(_from, _to, _tokenId);
     }
 

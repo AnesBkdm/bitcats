@@ -173,21 +173,21 @@ contract Bitcats is IERC721, Ownable {
         emit Approval(msg.sender, _approved, _tokenId);
     }
 
-    function setApprovalForAll(address _operator, bool _approved) override external{
+    function setApprovalForAll(address _operator, bool _approved) override external {
         require (_operator != msg.sender, "You can't set yourself as approved operator.");
         _setApprovalForAll(msg.sender, _operator, _approved);
         emit ApprovalForAll(msg.sender, _operator, _approved);
     }
 
-    function getApproved(uint256 _tokenId) override external view catMustExist(_tokenId) returns (address){
+    function getApproved(uint256 _tokenId) override external view catMustExist(_tokenId) returns (address) {
         return catIndexApproved[_tokenId];
     }
 
-    function isApprovedForAll(address _owner, address _operator) override external view returns (bool){
+    function isApprovedForAll(address _owner, address _operator) override external view returns (bool) {
         return operatorApprovals[_owner][_operator];
     }
 
-    function transferFrom(address _from, address _to, uint256 _tokenId) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId){
+    function transferFrom(address _from, address _to, uint256 _tokenId) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId) {
         if(catOwnership[_tokenId] == address(msg.sender)    // Cat owner
         || _isApproved(msg.sender, _tokenId)                // Approved user
         || _isApprovedForAll(msg.sender, _tokenId)) {       // Approved operator
@@ -197,12 +197,12 @@ contract Bitcats is IERC721, Ownable {
         }
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId) override external{
-
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId) {
+        _safeTransfer(_from, _to, _tokenId, '');
     }
 
-    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes calldata data) override external{
-
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes calldata data) override external noZero(_to) catMustExist(_tokenId) isOwner(_from, _tokenId) {
+        _safeTransfer(_from, _to, _tokenId, data);
     }
 
 

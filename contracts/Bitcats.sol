@@ -9,12 +9,16 @@ pragma solidity ^0.8.0;
 
 import "./IERC721.sol";
 import "./Ownable.sol";
+import "./IERC721Receiver.sol";
 
 contract Bitcats is IERC721, Ownable {
 
     uint256 public constant CREATION_LIMIT_GEN0 = 25;
     string public constant contractName = "Bitcats";
     string public constant ticker = "BITC";
+
+    bytes4 internal constant _ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
+
 
     struct Cat {
         uint256 genes;
@@ -26,9 +30,6 @@ contract Bitcats is IERC721, Ownable {
 
     Cat[] cats;
     
-    /**
-     * Mappings
-     */
     mapping (address => uint256) ownedTokenCount;
     mapping (uint256 => address) public catOwnership;
     mapping (uint256 => bool) catExists;
@@ -237,7 +238,7 @@ contract Bitcats is IERC721, Ownable {
         operatorApprovals[_allower][_operator] = _approved;
     }
 
-    function _isApproved(address _approved, uint256 _tokenId) private view returns (bool) {
+    function _isApproved(address _approved, uint256 _tokenId) internal view returns (bool) {
         if (catIndexApproved[_tokenId] == _approved)
             return true;
         else
@@ -245,11 +246,38 @@ contract Bitcats is IERC721, Ownable {
              
     }
 
-    function _isApprovedForAll(address _approved, uint256 _tokenId) private view returns (bool) {
+    function _isApprovedForAll(address _approved, uint256 _tokenId) internal view returns (bool) {
         if (operatorApprovals[catOwnership[_tokenId]][_approved])
             return true;
         else
             return false;
-             
+    }
+
+    function _safeTransfer(address _from, address _to, uint256 _tokenId, bytes memory _data) internal {
+        _transfer(_from, _to, _tokenId);
+        require(_checkERC721Support(_from, _to, _tokenId, _data));
+    }
+
+    function _checkERC721Support(address _from, address _to, uint256 _tokenId, bytes memory _data) internal returns (bool) {
+        if(!_isContract(_to)) {
+            return true;
+        }
+
+        bytes4 returnData = IERC721Receiver(_to).onERC721Received(msg.sender, _from, _tokenId, _data);
+
+        return (returnData == _ERC721_RECEIVED);
+
+        // require()
+        // Call onERC721Received in the _to contract
+        // Check returned value
+    }
+
+    function _isContract(address _to) view internal returns (bool) {
+        uint32 size;
+        assembly{
+            size := extcodesize(_to)
+        }
+
+        return (size > 0);
     }
 }

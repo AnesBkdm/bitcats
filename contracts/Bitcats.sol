@@ -155,30 +155,46 @@ contract Bitcats is IERC721, Ownable {
      * BREEDING
      */
 
-    function breed(uint256 _dadDna, uint256 _momDna) pure public returns (uint256) {
-        // Check ownership
+    function breed(uint256 _dadCat, uint256 _momCat) pure public returns (uint256) catMustExist(uint256 _dadCat) catMustExist(uint256 _momCat) onlyCatOwner(uint256 _dadCat) onlyCatOwner(uint256 _momCat) {
+        // Check ownership ^^^
+
         // Get DNA
+        uint256 dadDna = cats[_dadCat].genes;
+        uint256 momDna = cats[_momCat].genes;
+
         // Fix generation
+
         // Create new cat with new dna, give it to msg.sender
-        uint256 newDna = _mixDna(_dadDna, _momDna);
+        // uint256 newDna = _mixDna(dadDna, momDna);
+        
+        uint256 babyCat = _createCat(
+            _momCat,
+            _dadCat,
+            cats[_momCat].generation++,
+            _mixDna(dadDna, momDna),
+            msg.sender
+        );
+
+        return babyCat;
     }
 
     function _mixDna(uint256 _dadDna, uint256 _momDna) internal pure returns (uint256) {
-        // Fetcher
-        uint256 mamaHead = _momDna /    100000000000000;
-        uint256 mamaMouth = _momDna /   1000000000000 - mamaHead * 100;
-        uint256 mamaEyes = _momDna /    10000000000 - mamaHead * 10000 - mamaMouth * 100;
-        uint256 mamaEars = _momDna /    100000000 - mamaHead * 1000000 - mamaMouth * 10000 - mamaEyes * 100;
-        uint256 mamaEyeType = _momDna / 10000000 - mamaHead * 10000000 - mamaMouth * 100000 - mamaEyes * 1000 - mamaEars * 10;
-        uint256 mamaPattern = _momDna / 1000000 - mamaHead * 100000000 - mamaMouth * 1000000 - mamaEyes * 10000 - mamaEars * 100 - mamaEyeType * 10;
-        uint256 mamaPatternIn = _momDna / 10000 - mamaHead * 10000000000 - mamaMouth * 100000000 - mamaEyes * 1000000 - mamaEars * 10000 - mamaEyeType * 1000 - mamaPattern * 100;
-        uint256 mamaPatternOut =
-        uint256 mamaAni = 
-        uint256 mamaSpec =
-
-        
         uint256 firstHalf = _dadDna / 100000000; // 11 22 33 44
         uint256 secondHalf = _momDna % 100000000; // 44 33 22 11
+
+        return (firstHalf*100000000 + secondHalf);
+
+        // Fetcher (StackTooDeep lol)
+        // uint256 mamaHead = _momDna /        100000000000000;
+        // uint256 mamaMouth = _momDna /       1000000000000 - mamaHead * 100;
+        // uint256 mamaEyes = _momDna /        10000000000 - mamaHead * 10000 - mamaMouth * 100;
+        // uint256 mamaEars = _momDna /        100000000 - mamaHead * 1000000 - mamaMouth * 10000 - mamaEyes * 100;
+        // uint256 mamaEyeType = _momDna /     10000000 - mamaHead * 10000000 - mamaMouth * 100000 - mamaEyes * 1000 - mamaEars * 10;
+        // uint256 mamaPattern = _momDna /     1000000 - mamaHead * 100000000 - mamaMouth * 1000000 - mamaEyes * 10000 - mamaEars * 100 - mamaEyeType * 10;
+        // uint256 mamaPatternIn = _momDna /   10000 - mamaHead * 10000000000 - mamaMouth * 100000000 - mamaEyes * 1000000 - mamaEars * 10000 - mamaEyeType * 1000 - mamaPattern * 100;
+        // uint256 mamaPatternOut = _momDna /  100 - mamaHead * 1000000000000 - mamaMouth * 10000000000 - mamaEyes * 100000000 - mamaEars * 1000000 - mamaEyeType * 100000 - mamaPattern * 10000 - mamaPatternIn * 100;
+        // uint256 mamaAni = _momDna /         10 - mamaHead * 10000000000000 - mamaMouth * 100000000000 - mamaEyes * 1000000000 - mamaEars * 10000000 - mamaEyeType * 1000000 - mamaPattern * 100000 - mamaPatternIn * 1000 - mamaPatternOut * 10;
+        // uint256 mamaSpec = _momDna            - mamaHead * 100000000000000 - mamaMouth * 1000000000000 - mamaEyes * 10000000000 - mamaEars * 100000000 - mamaEyeType * 10000000 - mamaPattern * 1000000 - mamaPatternIn * 10000 - mamaPatternOut * 100 - mamaAni * 10;
 
     }
 

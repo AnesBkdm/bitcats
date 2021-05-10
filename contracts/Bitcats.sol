@@ -155,7 +155,7 @@ contract Bitcats is IERC721, Ownable {
      * BREEDING
      */
 
-    function breed(uint256 _dadDna, uint256 _momDna) public returns (uint256) {
+    function breed(uint256 _dadDna, uint256 _momDna) pure public returns (uint256) {
         // Check ownership
         // Get DNA
         // Fix generation
@@ -164,12 +164,28 @@ contract Bitcats is IERC721, Ownable {
     }
 
     function _mixDna(uint256 _dadDna, uint256 _momDna) internal pure returns (uint256) {
-        //11 22 33 44 55 66 77 88
-        //88 77 66 55 44 33 22 11
+        // Fetcher
+        uint256 mamaHead = _momDna /    100000000000000;
+        uint256 mamaMouth = _momDna /   1000000000000 - mamaHead * 100;
+        uint256 mamaEyes = _momDna /    10000000000 - mamaHead * 10000 - mamaMouth * 100;
+        uint256 mamaEars = _momDna /    100000000 - mamaHead * 1000000 - mamaMouth * 10000 - mamaEyes * 100;
+        uint256 mamaEyeType = _momDna / 10000000 - mamaHead * 10000000 - mamaMouth * 100000 - mamaEyes * 1000 - mamaEars * 10;
+        uint256 mamaPattern = _momDna / 1000000 - mamaHead * 100000000 - mamaMouth * 1000000 - mamaEyes * 10000 - mamaEars * 100 - mamaEyeType * 10;
+        uint256 mamaPatternIn = _momDna / 10000 - mamaHead * 10000000000 - mamaMouth * 100000000 - mamaEyes * 1000000 - mamaEars * 10000 - mamaEyeType * 1000 - mamaPattern * 100;
+        uint256 mamaPatternOut =
+        uint256 mamaAni = 
+        uint256 mamaSpec =
+
         
         uint256 firstHalf = _dadDna / 100000000; // 11 22 33 44
         uint256 secondHalf = _momDna % 100000000; // 44 33 22 11
 
+    }
+
+    // RANDOM GENERATOR
+    function random() private view returns (uint8) {
+        uint256 ran = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty)));
+        return uint8( ran%251 );
     }
 
     /**

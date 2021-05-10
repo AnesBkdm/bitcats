@@ -19,7 +19,10 @@ contract Bitcats is IERC721, Ownable {
 
     bytes4 internal constant _ERC721_RECEIVED = bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"));
     
+    // XOR of below keccaks
     bytes4 private constant _INTERFACE_ID_ERC721 = 0x80ac58cd;
+
+    // bytes4(keccak256('supportsInterface(bytes4)'))
     bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
 
     struct Cat {
@@ -148,6 +151,26 @@ contract Bitcats is IERC721, Ownable {
         owner = catOwnership[_tokenId];
     }
 
+    /**
+     * BREEDING
+     */
+
+    function breed(uint256 _dadDna, uint256 _momDna) public returns (uint256) {
+        // Check ownership
+        // Get DNA
+        // Fix generation
+        // Create new cat with new dna, give it to msg.sender
+        uint256 newDna = _mixDna(_dadDna, _momDna);
+    }
+
+    function _mixDna(uint256 _dadDna, uint256 _momDna) internal pure returns (uint256) {
+        //11 22 33 44 55 66 77 88
+        //88 77 66 55 44 33 22 11
+        
+        uint256 firstHalf = _dadDna / 100000000; // 11 22 33 44
+        uint256 secondHalf = _momDna % 100000000; // 44 33 22 11
+
+    }
 
     /**
      * ERC721 implementation

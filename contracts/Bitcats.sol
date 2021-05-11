@@ -156,13 +156,22 @@ contract Bitcats is IERC721, Ownable {
      */
 
     function breed(uint256 _dadCat, uint256 _momCat) pure public returns (uint256) catMustExist(uint256 _dadCat) catMustExist(uint256 _momCat) onlyCatOwner(uint256 _dadCat) onlyCatOwner(uint256 _momCat) {
-        // Check ownership ^^^
-
         // Get DNA
         uint256 dadDna = cats[_dadCat].genes;
         uint256 momDna = cats[_momCat].genes;
 
         // Fix generation
+        uint256 kidGen;
+
+        if(cats[_dadCat].generation < cats[_momCat].generation) {
+            kidGen = cats[_momCat].generation++;
+            kidGen /= 2;
+        } else if (cats[_dadCat].generation > cats[_momCat].generation) {
+            kidGen = cats[_dadCat].generation++;
+            kidGen /= 2;
+        } else {
+            kidGen = cats[_momCat].generation++;
+        }
 
         // Create new cat with new dna, give it to msg.sender
         // uint256 newDna = _mixDna(dadDna, momDna);
@@ -170,7 +179,7 @@ contract Bitcats is IERC721, Ownable {
         uint256 babyCat = _createCat(
             _momCat,
             _dadCat,
-            cats[_momCat].generation++,
+            kidGen,
             _mixDna(dadDna, momDna),
             msg.sender
         );
